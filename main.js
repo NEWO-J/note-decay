@@ -23,6 +23,9 @@ function tierClass(tier) {
 }
 
 const DEFAULT_SETTINGS = {
+  greenMaxFraction: 0.65,
+  yellowMaxFraction: 0.85,
+  orangeMaxFraction: 1,
   greenMaxDays: 3,
   yellowMaxDays: 7,
   orangeMaxDays: 14,
@@ -82,11 +85,21 @@ function tierForDays(days, settings) {
   return "red";
 }
 
+function tierForProgress(progress, settings) {
+  if (progress < settings.greenMaxFraction) return "green";
+  if (progress < settings.yellowMaxFraction) return "yellow";
+  if (progress < settings.orangeMaxFraction) return "orange";
+  return "red";
+}
+
 function resolveTier(frontmatter, fallbackMtime, settings) {
   const fm = frontmatter || {};
-  const overdue = daysSinceReviewed(fm[SR_KEYS.due]);
-  if (overdue !== null) return tierForDays(overdue, settings);
-  let days = daysSinceReviewed(fm[FRONTMATTER_KEY]);
+  const elapsed = daysSinceReviewed(fm[FRONTMATTER_KEY]);
+  const interval = readSrState(fm).interval;
+  if (elapsed !== null && interval > 0) {
+    return tierForProgress(elapsed / interval, settings);
+  }
+  let days = elapsed;
   if (days === null && settings.useModifiedAsFallback && typeof fallbackMtime === "number") {
     days = daysSinceReviewed(new Date(fallbackMtime));
   }
@@ -385,12 +398,29 @@ class ReviewTrackerSettingTab extends PluginSettingTab {
 
     containerEl.createEl("h2", { text: "Note Decay" });
     containerEl.createEl("p", {
-      text: "Colors reflect how overdue a note is. Notes with no schedule fall back to last_reviewed or the file's modified date.",
+      text: "Colors reflect how far a note has ripened toward its next review: 0 is freshly reviewed, 1 is due. Notes with no schedule fall back to last_reviewed or the file's modified date.",
       cls: "setting-item-description",
     });
 
     const s = this.plugin.settings;
     const self = this;
+
+    const fractionSetting = function (name, desc, get, set) {
+      new Setting(containerEl)
+        .setName(name)
+        .setDesc(desc)
+        .addText((text) =>
+          text
+            .setPlaceholder("0-1")
+            .setValue(String(get()))
+            .onChange(async (raw) => {
+              const v = Number(raw);
+              if (!Number.isFinite(v) || v < 0 || v > 1) return;
+              set(v);
+              await self.plugin.saveSettings();
+            })
+        );
+    };
 
     const numberSetting = function (name, desc, get, set) {
       new Setting(containerEl)
@@ -409,12 +439,12 @@ class ReviewTrackerSettingTab extends PluginSettingTab {
         );
     };
 
-    numberSetting("Green up to", "Overdue by at most this many days.",
-      () => s.greenMaxDays, (v) => (s.greenMaxDays = v));
-    numberSetting("Yellow up to", "Overdue by at most this many days.",
-      () => s.yellowMaxDays, (v) => (s.yellowMaxDays = v));
-    numberSetting("Orange up to", "Overdue by at most this many days. Older turns red.",
-      () => s.orangeMaxDays, (v) => (s.orangeMaxDays = v));
+    fractionSetting("Green up to", "Ripeness fraction (0-1) at most this fresh stays green.",
+      () => s.greenMaxFraction, (v) => (s.greenMaxFraction = v));
+    fractionSetting("Yellow up to", "Ripeness fraction (0-1) at most this stays yellow.",
+      () => s.yellowMaxFraction, (v) => (s.yellowMaxFraction = v));
+    fractionSetting("Orange up to", "Ripeness fraction (0-1) at most this stays orange. At or past due turns red.",
+      () => s.orangeMaxFraction, (v) => (s.orangeMaxFraction = v));
     numberSetting("Grading cooldown (minutes)",
       "Lock a note's grade buttons for this long after grading. 0 disables it.",
       () => s.cooldownMinutes, (v) => (s.cooldownMinutes = v));

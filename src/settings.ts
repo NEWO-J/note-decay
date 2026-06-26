@@ -17,6 +17,28 @@ export class ReviewTrackerSettingTab extends PluginSettingTab {
 
     const s = this.plugin.settings;
 
+    const fractionSetting = (
+      name: string,
+      desc: string,
+      get: () => number,
+      set: (v: number) => void,
+    ) => {
+      new Setting(containerEl)
+        .setName(name)
+        .setDesc(desc)
+        .addText((text) =>
+          text
+            .setPlaceholder("0-1")
+            .setValue(String(get()))
+            .onChange(async (raw) => {
+              const v = Number(raw);
+              if (!Number.isFinite(v) || v < 0 || v > 1) return;
+              set(v);
+              await this.plugin.saveSettings();
+            }),
+        );
+    };
+
     const numberSetting = (
       name: string,
       desc: string,
@@ -39,12 +61,12 @@ export class ReviewTrackerSettingTab extends PluginSettingTab {
         );
     };
 
-    numberSetting("Green up to", "Overdue by at most this many days.",
-      () => s.greenMaxDays, (v) => (s.greenMaxDays = v));
-    numberSetting("Yellow up to", "Overdue by at most this many days.",
-      () => s.yellowMaxDays, (v) => (s.yellowMaxDays = v));
-    numberSetting("Orange up to", "Overdue by at most this many days. Older turns red.",
-      () => s.orangeMaxDays, (v) => (s.orangeMaxDays = v));
+    fractionSetting("Green up to", "Ripeness fraction (0-1) at most this fresh stays green.",
+      () => s.greenMaxFraction, (v) => (s.greenMaxFraction = v));
+    fractionSetting("Yellow up to", "Ripeness fraction (0-1) at most this stays yellow.",
+      () => s.yellowMaxFraction, (v) => (s.yellowMaxFraction = v));
+    fractionSetting("Orange up to", "Ripeness fraction (0-1) at most this stays orange. At or past due turns red.",
+      () => s.orangeMaxFraction, (v) => (s.orangeMaxFraction = v));
 
     numberSetting("Grading cooldown (minutes)",
       "Lock a note's grade buttons for this long after grading. 0 disables it.",

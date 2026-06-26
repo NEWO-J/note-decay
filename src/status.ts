@@ -10,6 +10,9 @@ export function tierClass(tier: StatusTier): string {
 }
 
 export interface ReviewTrackerSettings {
+  greenMaxFraction: number;
+  yellowMaxFraction: number;
+  orangeMaxFraction: number;
   greenMaxDays: number;
   yellowMaxDays: number;
   orangeMaxDays: number;
@@ -20,6 +23,9 @@ export interface ReviewTrackerSettings {
 }
 
 export const DEFAULT_SETTINGS: ReviewTrackerSettings = {
+  greenMaxFraction: 0.65,
+  yellowMaxFraction: 0.85,
+  orangeMaxFraction: 1,
   greenMaxDays: 3,
   yellowMaxDays: 7,
   orangeMaxDays: 14,
@@ -65,15 +71,28 @@ export function tierForDays(days: number, settings: ReviewTrackerSettings): Stat
   return "red";
 }
 
+export function tierForProgress(progress: number, settings: ReviewTrackerSettings): StatusTier {
+  if (progress < settings.greenMaxFraction) return "green";
+  if (progress < settings.yellowMaxFraction) return "yellow";
+  if (progress < settings.orangeMaxFraction) return "orange";
+  return "red";
+}
+
 export function resolveTier(
   frontmatter: Record<string, unknown> | undefined,
   fallbackMtime: number | undefined,
   settings: ReviewTrackerSettings,
 ): StatusTier | null {
-  const overdue = daysSinceReviewed(frontmatter?.[SR_KEYS.due]);
-  if (overdue !== null) return tierForDays(overdue, settings);
+  const elapsed = daysSinceReviewed(frontmatter?.[FRONTMATTER_KEY]);
+  const interval = readSrState(frontmatter).interval;
 
-  let days = daysSinceReviewed(frontmatter?.[FRONTMATTER_KEY]);
+  // Graded note: color by how far it has ripened toward its due date.
+  if (elapsed !== null && interval > 0) {
+    return tierForProgress(elapsed / interval, settings);
+  }
+
+  // Ungraded note: no interval yet, fall back to raw days since the file date.
+  let days = elapsed;
   if (days === null && settings.useModifiedAsFallback && typeof fallbackMtime === "number") {
     days = daysSinceReviewed(new Date(fallbackMtime));
   }

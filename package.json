@@ -1,7 +1,7 @@
 {
   "name": "obsidian-note-decay",
-  "version": "1.0.1",
-  "description": "Color-codes notes by how overdue they are for review, using SM-2 spaced repetition.",
+  "version": "1.0.2",
+  "description": "Color-codes notes by how close they are to their next review, using SM-2 spaced repetition.",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
