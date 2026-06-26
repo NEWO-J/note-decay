@@ -22,6 +22,9 @@ color-codes the whole vault by how overdue each note is.
 - Open Obsidian
 - Enable community plugins - Go to Settings → Community plugins → Turn on community plugins
 - Install Note Decay - Click "Browse" → Search for "Note Decay" → Install
+OR
+- Browse (Here)[https://community.obsidian.md/plugins/note-decay]
+- Click "Add to Obsidian" 
 
 ## Frontmatter
 
