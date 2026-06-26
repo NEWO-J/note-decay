@@ -12,8 +12,7 @@ color-codes the whole vault by how overdue each note is.
 - Graph view nodes can be colored too, via a `review_status` property and color
   groups.
 - Existing notes are seeded from their file date so the vault isn't blank on day one.
-  
-  [Grade notes](grade_notes.png)
+![Grade notes](grade_notes.png)
 - Grade notes from a bar at the top of each note. Each button shows the interval
   it will schedule.
 - Grading cooldown to avoid accidentally spamming a note's interval.
