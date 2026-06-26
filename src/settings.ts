@@ -13,11 +13,7 @@ export class ReviewTrackerSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl("h2", { text: "Note Decay" });
-    containerEl.createEl("p", {
-      text: "Colors reflect how overdue a note is. Notes with no schedule fall back to last_reviewed or the file's modified date.",
-      cls: "setting-item-description",
-    });
+    new Setting(containerEl).setName("Color thresholds").setHeading();
 
     const s = this.plugin.settings;
 
@@ -53,6 +49,8 @@ export class ReviewTrackerSettingTab extends PluginSettingTab {
     numberSetting("Grading cooldown (minutes)",
       "Lock a note's grade buttons for this long after grading. 0 disables it.",
       () => s.cooldownMinutes, (v) => (s.cooldownMinutes = v));
+
+    new Setting(containerEl).setName("Behavior").setHeading();
 
     new Setting(containerEl)
       .setName("Use modified date for un-reviewed notes")

@@ -107,6 +107,6 @@ export class ReviewBar {
       window.clearTimeout(this.refreshTimer);
       this.refreshTimer = null;
     }
-    document.querySelectorAll(`.${BAR_CLASS}`).forEach((el) => el.remove());
+    activeDocument.querySelectorAll(`.${BAR_CLASS}`).forEach((el) => el.remove());
   }
 }

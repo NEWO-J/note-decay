@@ -1,8 +1,8 @@
 {
   "id": "note-decay",
   "name": "Note Decay",
-  "version": "1.0.0",
-  "minAppVersion": "1.4.0",
+  "version": "1.0.1",
+  "minAppVersion": "1.5.0",
   "description": "Color-codes notes by how overdue they are for review, using SM-2 spaced repetition.",
   "author": "NEWO-J",
   "authorUrl": "https://github.com/NEWO-J",

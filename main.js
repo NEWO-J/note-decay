@@ -183,7 +183,7 @@ class ExplorerDecorator {
     const view = this.getExplorerView();
     const item = view && view.fileItems ? view.fileItems[path] : null;
     if (item && item.selfEl) return item.selfEl;
-    return document.querySelector(
+    return activeDocument.querySelector(
       '.nav-files-container .nav-file-title[data-path="' + CSS.escape(path) + '"]'
     );
   }
@@ -192,7 +192,7 @@ class ExplorerDecorator {
     const view = this.getExplorerView();
     const item = view && view.fileItems ? view.fileItems[path] : null;
     if (item && item.selfEl) return item.selfEl;
-    return document.querySelector(
+    return activeDocument.querySelector(
       '.nav-files-container .nav-folder-title[data-path="' + CSS.escape(path) + '"]'
     );
   }
@@ -244,7 +244,7 @@ class ExplorerDecorator {
       }
     }
 
-    document
+    activeDocument
       .querySelectorAll(".nav-folder-title")
       .forEach((el) => el.classList.remove.apply(el.classList, ALL_TIER_CLASSES));
 
@@ -270,7 +270,7 @@ class ExplorerDecorator {
       window.clearTimeout(this.folderTimer);
       this.folderTimer = null;
     }
-    document
+    activeDocument
       .querySelectorAll(".nav-file-title, .nav-folder-title")
       .forEach((el) => el.classList.remove.apply(el.classList, ALL_TIER_CLASSES));
   }
@@ -369,7 +369,7 @@ class ReviewBar {
       window.clearTimeout(this.refreshTimer);
       this.refreshTimer = null;
     }
-    document.querySelectorAll("." + BAR_CLASS).forEach((el) => el.remove());
+    activeDocument.querySelectorAll("." + BAR_CLASS).forEach((el) => el.remove());
   }
 }
 
@@ -478,9 +478,9 @@ class ReviewTrackerPlugin extends Plugin {
         name: "Review: " + grade.charAt(0).toUpperCase() + grade.slice(1),
         checkCallback: (checking) => {
           const file = this.app.workspace.getActiveFile();
-          const eligible = !!file && file.extension === "md";
-          if (eligible && !checking) this.grade(file, grade);
-          return eligible;
+          if (!file || file.extension !== "md") return false;
+          if (!checking) this.grade(file, grade);
+          return true;
         },
       });
     }

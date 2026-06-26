@@ -18,6 +18,12 @@ import { ExplorerDecorator } from "./decorator";
 import { ReviewBar } from "./reviewbar";
 import { ReviewTrackerSettingTab } from "./settings";
 
+interface MetadataTypeManager {
+  setType(name: string, type: string): void;
+  getAssignedType?(name: string): string | undefined;
+  types?: Record<string, { type?: string } | undefined>;
+}
+
 export default class ReviewTrackerPlugin extends Plugin {
   settings: ReviewTrackerSettings = DEFAULT_SETTINGS;
   private cooldowns: Record<string, number> = {};
@@ -43,9 +49,9 @@ export default class ReviewTrackerPlugin extends Plugin {
         name: `Review: ${grade[0].toUpperCase()}${grade.slice(1)}`,
         checkCallback: (checking) => {
           const file = this.app.workspace.getActiveFile();
-          const eligible = !!file && file.extension === "md";
-          if (eligible && !checking) void this.grade(file!, grade);
-          return eligible;
+          if (!file || file.extension !== "md") return false;
+          if (!checking) void this.grade(file, grade);
+          return true;
         },
       });
     }
@@ -105,7 +111,8 @@ export default class ReviewTrackerPlugin extends Plugin {
 
   private ensurePropertyTypes(): void {
     if (!this.settings.forceTextDateProps) return;
-    const mtm = (this.app as unknown as { metadataTypeManager?: any }).metadataTypeManager;
+    const mtm = (this.app as unknown as { metadataTypeManager?: MetadataTypeManager })
+      .metadataTypeManager;
     if (!mtm || typeof mtm.setType !== "function") return;
 
     for (const key of [FRONTMATTER_KEY, SR_KEYS.due]) {
@@ -118,8 +125,8 @@ export default class ReviewTrackerPlugin extends Plugin {
           current = entry && entry.type ? entry.type : undefined;
         }
         if (current !== "text") mtm.setType(key, "text");
-      } catch (_e) {
-        // ignore
+      } catch {
+        // type manager API unavailable in this version
       }
     }
   }

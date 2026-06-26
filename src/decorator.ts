@@ -42,7 +42,7 @@ export class ExplorerDecorator {
     const view = this.getExplorerView();
     const item = view?.fileItems?.[path];
     if (item?.selfEl) return item.selfEl;
-    return document.querySelector<HTMLElement>(
+    return activeDocument.querySelector<HTMLElement>(
       `.nav-files-container .nav-file-title[data-path="${CSS.escape(path)}"]`,
     );
   }
@@ -51,7 +51,7 @@ export class ExplorerDecorator {
     const view = this.getExplorerView();
     const item = view?.fileItems?.[path];
     if (item?.selfEl) return item.selfEl;
-    return document.querySelector<HTMLElement>(
+    return activeDocument.querySelector<HTMLElement>(
       `.nav-files-container .nav-folder-title[data-path="${CSS.escape(path)}"]`,
     );
   }
@@ -99,7 +99,7 @@ export class ExplorerDecorator {
       }
     }
 
-    document
+    activeDocument
       .querySelectorAll<HTMLElement>(".nav-folder-title")
       .forEach((el) => el.classList.remove(...ALL_TIER_CLASSES));
 
@@ -123,7 +123,7 @@ export class ExplorerDecorator {
       window.clearTimeout(this.folderTimer);
       this.folderTimer = null;
     }
-    document
+    activeDocument
       .querySelectorAll<HTMLElement>(".nav-file-title, .nav-folder-title")
       .forEach((el) => el.classList.remove(...ALL_TIER_CLASSES));
   }
