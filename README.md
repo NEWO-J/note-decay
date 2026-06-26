@@ -19,9 +19,9 @@ color-codes the whole vault by how overdue each note is.
 - Grading cooldown to avoid accidentally spamming a note's interval.
 
 ## Install
-= Open Obsidian
+- Open Obsidian
 - Enable community plugins - Go to Settings → Community plugins → Turn on community plugins
-= Install Note Decay - Click "Browse" → Search for "Note Decay" → Install
+- Install Note Decay - Click "Browse" → Search for "Note Decay" → Install
 
 ## Frontmatter
 
