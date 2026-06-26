@@ -1,7 +1,7 @@
 ![Note Decay](note-decay.png)
 
 An Obsidian plugin for spaced-repetition review of your notes. Grade a note with
-Again/Hard/Good/Easy (SM-2 Algorithim), and the plugin schedules the next review and
+Again/Hard/Good/Easy (SM-2 Algorithm), and the plugin schedules the next review and
 color-codes the whole vault by how overdue each note is.
 
 ## Features
