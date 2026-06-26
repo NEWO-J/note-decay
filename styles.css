@@ -66,7 +66,7 @@
   border-left-color: var(--color-red, #e03131);
 }
 
-.review-tracker-bar {
+.digital-garden-bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -76,16 +76,16 @@
   background: var(--background-secondary);
   border-bottom: 1px solid var(--background-modifier-border);
 }
-.review-tracker-bar .rt-info {
+.digital-garden-bar .rt-info {
   font-size: var(--font-ui-smaller);
   color: var(--text-muted);
   margin-right: auto;
 }
-.review-tracker-bar .rt-buttons {
+.digital-garden-bar .rt-buttons {
   display: flex;
   gap: 6px;
 }
-.review-tracker-bar .rt-btn {
+.digital-garden-bar .rt-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -95,29 +95,29 @@
   border-radius: var(--radius-s);
   border: 1px solid var(--background-modifier-border);
 }
-.review-tracker-bar .rt-btn .rt-grade {
+.digital-garden-bar .rt-btn .rt-grade {
   font-weight: var(--font-semibold, 600);
 }
-.review-tracker-bar .rt-btn .rt-int {
+.digital-garden-bar .rt-btn .rt-int {
   font-size: var(--font-ui-smaller);
   color: var(--text-muted);
 }
-.review-tracker-bar .rt-again {
+.digital-garden-bar .rt-again {
   border-color: var(--color-red, #e03131);
 }
-.review-tracker-bar .rt-hard {
+.digital-garden-bar .rt-hard {
   border-color: var(--color-orange, #e8820e);
 }
-.review-tracker-bar .rt-good {
+.digital-garden-bar .rt-good {
   border-color: var(--color-green, #28a745);
 }
-.review-tracker-bar .rt-easy {
+.digital-garden-bar .rt-easy {
   border-color: var(--color-blue, #4c8dff);
 }
-.review-tracker-bar .rt-btn:hover {
+.digital-garden-bar .rt-btn:hover {
   background: var(--background-modifier-hover);
 }
-.review-tracker-bar .rt-btn:disabled {
+.digital-garden-bar .rt-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }

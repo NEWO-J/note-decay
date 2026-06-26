@@ -13,7 +13,7 @@ export class ReviewTrackerSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl("h2", { text: "Review Tracker" });
+    containerEl.createEl("h2", { text: "Digital Garden" });
     containerEl.createEl("p", {
       text: "Colors reflect how overdue a note is. Notes with no schedule fall back to last_reviewed or the file's modified date.",
       cls: "setting-item-description",

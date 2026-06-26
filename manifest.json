@@ -1,6 +1,6 @@
 {
-  "id": "review-tracker",
-  "name": "Review Tracker",
+  "id": "digital-garden",
+  "name": "Digital Garden",
   "version": "1.0.0",
   "minAppVersion": "1.4.0",
   "description": "Spaced-repetition review tracker that color-codes notes by how overdue they are.",

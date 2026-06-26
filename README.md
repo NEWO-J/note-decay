@@ -41,7 +41,7 @@ npm run build
 ```
 
 Copy `main.js`, `manifest.json`, and `styles.css` into
-`<vault>/.obsidian/plugins/review-tracker/`.
+`<vault>/.obsidian/plugins/digital-garden/`.
 
 ## License
 
